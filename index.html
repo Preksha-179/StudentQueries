@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Fitness Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', Arial, sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); color: #fff; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Navigation */
+        .navbar { 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ff6600; 
+            padding: 1rem 2rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: bold; }
+        .logo-icon { 
+            width: 45px; 
+            height: 45px; 
+            background: linear-gradient(135deg, #ff6600, #ff8533); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+        }
+        .logo span { color: #ff6600; }
+        
+        .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+        .nav-links button { 
+            background: none; 
+            border: none; 
+            color: #fff; 
+            cursor: pointer; 
+            font-size: 0.95rem; 
+            padding: 0.6rem 1rem; 
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .nav-links button:hover { color: #ff6600; background: rgba(255, 102, 0, 0.1); }
+        .nav-links button.active { color: #ff6600; }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #ff6600, #ff8533); 
+            padding: 0.7rem 1.5rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            border: none; 
+            color: #fff; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            font-family: inherit;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 15px #ff6600, 0 0 30px rgba(255, 102, 0, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #ff6600;
+            padding: 0.7rem 1.5rem; 
+            border-radius: 8px;
+            font-weight: 600;
+            color: #ff6600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .btn-secondary:hover {
+            background: #ff6600;
+            color: #fff;
+            box-shadow: 0 0 15px #ff6600, 0 0 30px rgba(255, 102, 0, 0.6);
+        }
+        
+        /* Mobile Menu */
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .hamburger span { width: 25px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+        
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links { 
+                position: fixed; 
+                top: 70px; 
+                left: 0; 
+                right: 0; 
+                background: rgba(0, 0, 0, 0.98); 
+                flex-direction: column; 
+                padding: 2rem; 
+                gap: 1rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .nav-links.active { transform: translateX(0); }
+            .nav-links button { width: 100%; text-align: center; padding: 1rem; }
+        }
+        
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        .hidden { display: none !important; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Scroll Animations */
+        .scroll-hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        
+        /* Cards */
+        .card { 
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 2rem; 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6600, #ff8533);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .card:hover::before { transform: scaleX(1); }
+        .card:hover { 
+            border-color: #ff6600; 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(255, 102, 0, 0.2);
+        }
+        
+        .section-title { 
+            text-align: center; 
+            font-size: 2.5rem; 
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .section-title span { color: #ff6600; }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6600, #ff8533);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+        
+        /* Home Page */
+        .hero { 
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center; 
+            justify-content: space-between;
+            gap: 4rem; 
+            padding: 4rem 2rem;
+            min-height: 80vh;
+        }
+        .hero > div { flex: 1 1 400px; }
+
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; line-height: 1.2; }
+        .hero h1 span { 
+            background: linear-gradient(135deg, #ff6600, #ff8533);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p { font-size: 1.2rem; color: #aaa; margin-bottom: 1.5rem; line-height: 1.6; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        @media (max-width: 900px) {
+            .hero { text-align: center; justify-content: center; }
+            .hero-buttons { justify-content: center; }
+        }
+        .hero-image { 
+            width: 100%; 
+            max-width: 500px; 
+            border-radius: 20px;
+            display: block;
+        }
+        
+        /* Forms */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #ccc; font-weight: 500; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 1rem 1.2rem; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 12px; 
+            color: #fff; 
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-group input:hover, .form-group select:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .form-group input:focus, .form-group select:focus { 
+            outline: none; 
+            border-color: #ff6600;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.15), 0 0 20px rgba(255, 102, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .form-group input.error { border-color: #ff4444; }
+        .form-group input.success { border-color: #00cc66; }
+        .error-text { color: #ff4444; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+        .error-text.show { display: block; }
+        .password-hint { color: #888; font-size: 0.8rem; margin-top: 0.5rem; }
+        
+        /* Password Strength */
+        .password-strength { margin-top: 0.5rem; }
+        .strength-bar { height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+        .strength-fill { height: 100%; width: 0; transition: all 0.3s ease; }
+        .strength-text { font-size: 0.8rem; margin-top: 0.3rem; }
+        
+        /* Password Toggle */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: None;
+            cursor: pointer;
+            color: #888;
+            font-size: 1.2rem;
+            padding: 5px;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .password-toggle:hover {
+            color: #ff6600;
+        }
+        
+        /* BMI Calculator */
+        .bmi-container { max-width: 600px; margin: 0 auto; }
+        .result-box { 
+            margin-top: 2rem; 
+            padding: 2rem; 
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px; 
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .result-value { font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .bmi-gauge { 
+            width: 100%; 
+            height: 20px; 
+            background: linear-gradient(90deg, #00cc66, #88cc00, #ffcc00, #ff6600, #ff4444);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .bmi-indicator {
+            position: absolute;
+            top: -8px;
+            width: 4px;
+            height: 36px;
+            background: #fff;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transition: left 0.5s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .bmi-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+        .bmi-category { font-size: 1.5rem; margin-top: 1rem; }
+        .bmi-tips { margin-top: 1.5rem; text-align: left; padding: 1rem; background: rgba(255, 102, 0, 0.1); border-radius: 10px; }
+        .bmi-tips h4 { color: #ff6600; margin-bottom: 0.5rem; }
+        .bmi-tips ul { margin-left: 1.2rem; color: #ccc; }
+        .bmi-tips li { margin-bottom: 0.3rem; }
+        
+        /* Nutrition Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            background: linear-gradient(135deg, #ff6600, #ff8533); 
+            padding: 1rem; 
+            text-align: left;
+            font-weight: 600;
+        }
+        th:first-child { border-radius: 10px 0 0 0; }
+        th:last-child { border-radius: 0 10px 0 0; }
+        td { padding: 1rem; border-bottom: 1px solid #333; transition: background 0.3s ease; }
+        tr:hover td { background: rgba(255, 102, 0, 0.1); }
+        .calorie-value { color: #ff6600; font-weight: 600; }
+        .protein-high { color: #00cc66; }
+        
+        /* Programs Tabs */
+        .tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab-btn { 
+            padding: 1rem 2rem; 
+            background: #2a2a2a; 
+            border: 2px solid transparent; 
+            border-radius: 50px; 
+            color: #fff; 
+            cursor: pointer; 
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover { border-color: #ff6600; }
+        .tab-btn.active { background: linear-gradient(135deg, #ff6600, #ff8533); border-color: #ff6600; }
+        
+        /* Program Cards */
+        .program-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .program-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.3);
+            border-color: #ff6600;
+        }
+        .program-card .card-img {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .program-card .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .program-card:hover .card-img img { transform: scale(1.1); }
+        .program-card .card-content { padding: 1rem; }
+        .program-card h3 { margin-bottom: 0.3rem; transition: color 0.3s ease; font-size: 1.1rem; }
+        .program-card:hover h3 { color: #ff6600; }
+        .program-card p { color: #aaa; font-size: 0.8rem; margin-bottom: 0.2rem; }
+        
+        .badge { 
+            display: inline-block; 
+            padding: 0.4rem 1rem; 
+            border-radius: 50px; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            margin-top: 0.8rem; 
+        }
+        .badge-equipment { background: linear-gradient(135deg, #ff6600, #ff8533); }
+        .badge-bodyweight { background: linear-gradient(135deg, #00cc66, #00aa55); }
+        
+        /* Exercise Lists */
+        .exercise-section { margin-bottom: 2rem; }
+        .exercise-section h3 { color: #ff6600; margin-bottom: 1.5rem; font-size: 1.3rem; }
+        .exercise-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+        .exercise-item {
+            background: #1a1a1a;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .exercise-item:hover {
+            background: #252525;
+            transform: translateX(10px);
+            border-color: #ff6600;
+        }
+        .exercise-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #333, #222);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ff6600;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .exercise-item:hover .exercise-icon {
+            background: linear-gradient(135deg, #ff6600, #ff8533);
+            color: #fff;
+        }
+        .exercise-info h4 { margin-bottom: 0.2rem; font-size: 0.95rem; }
+        .exercise-info p { color: #888; font-size: 0.85rem; }
+        
+        /* Cardio Cards */
+        .cardio-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .cardio-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.3);
+            border-color: #ff6600;
+        }
+        .cardio-card .card-img {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ff6600;
+            overflow: hidden;
+        }
+        .cardio-card .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .cardio-card:hover .card-img img { transform: scale(1.1); }
+        .cardio-card .card-content { padding: 1rem; }
+        .cardio-card h3 { margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .cardio-card p { color: #aaa; font-size: 0.8rem; margin-bottom: 0.2rem; }
+        .cardio-card .calories { color: #ff6600; font-weight: 600; font-size: 0.95rem; margin-top: 0.4rem; }
+        .intensity-bar { 
+            display: flex; 
+            gap: 3px; 
+            margin-top: 0.8rem; 
+        }
+        .intensity-bar span {
+            width: 20px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+        }
+        .intensity-bar.moderate span:nth-child(-n+3) { background: #ffcc00; }
+        .intensity-bar.high span:nth-child(-n+4) { background: #ff6600; }
+        .intensity-bar.extreme span { background: #ff4444; }
+        
+        
+        /* Footer */
+        .footer {
+            background: #0a0a0a;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid #333;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .footer h4 { color: #ff6600; margin-bottom: 1rem; }
+        .footer p, .footer a { color: #888; font-size: 0.9rem; text-decoration: none; display: block; margin-bottom: 0.5rem; }
+        .footer a:hover { color: #ff6600; }
+        .footer-bottom { text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #333; color: #666; }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            background: #2a2a2a;
+            border-left: 4px solid #ff6600;
+            border-radius: 8px;
+            color: #fff;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-color: #00cc66; }
+        .toast.error { border-color: #ff4444; }
+        
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Modal for Workouts */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 1500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .modal-close:hover {
+            background: #ff6600;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">HF</div>
+            <div>Health <span>Fitness</span></div>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <button onclick="showPage('home')" class="active" data-page="home">Home</button>
+            <button onclick="showPage('programs')" data-page="programs">Programs</button>
+            <button onclick="showPage('workouts')" data-page="workouts">Workouts</button>
+            <button onclick="showPage('bmi')" data-page="bmi">BMI</button>
+            <button onclick="showPage('nutrition')" data-page="nutrition">Nutrition</button>
+            <button onclick="showPage('cardio')" data-page="cardio">Cardio</button>
+            <div id="userSection">
+                <button class="btn-primary" onclick="showPage('auth')">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero">
+                <div class="scroll-hidden">
+                    <h1>Transform Your <span>Body</span> & Mind</h1>
+                    <p>Start your fitness journey today with personalized workout programs, nutrition tracking, and expert guidance. Your healthier self is just one step away.</p>
+                    <p id="welcomeMessage" style="font-size: 1.3rem; color: #ff6600; margin-bottom: 1rem; display: none;"></p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="showPage('programs')">Get Started</button>
+                        <button class="btn-secondary" onclick="showPage('bmi')">Calculate BMI</button>
+                    </div>
+                </div>
+                <img src="C:/Users/Supriyap/Desktop/HealthFit/hero1.jpeg" alt="Hero Image" class="hero-image scroll-hidden">
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN/SIGNUP PAGE -->
+    <div id="auth" class="page">
+        <div class="container">
+            <div style="max-width: 420px; margin: 2rem auto;" class="card scroll-hidden">
+                <h2 id="authTitle" style="text-align: center; margin-bottom: 2rem;">Login</h2>
+                
+                <div class="form-group hidden" id="nameGroup">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name" oninput="validateField('name')">
+                    <div class="error-text" id="nameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" oninput="validateField('email')">
+                    <div class="error-text" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Enter your password" oninput="validateField('password'); updatePasswordStrength()">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" id="passwordToggle" title="Show password">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="error-text" id="passwordError"></div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                        <div class="strength-text" id="strengthText"></div>
+                    </div>
+                    <p class="password-hint">Min 8 characters with at least one special character (!@#$%^&*)</p>
+                </div>
+                
+                <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="handleAuth()" id="authButton">
+                    <span id="authButtonText">Login</span>
+                </button>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: #888;">
+                    <span id="authSwitchText">Don't have an account?</span>
+                    <button style="color: #ff6600; background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600;" onclick="toggleAuthMode()">
+                        <span id="authSwitchButton">Sign Up</span>
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BMI CALCULATOR PAGE -->
+    <div id="bmi" class="page">
+        <div class="container">
+            <h2 class="section-title">BMI <span>Calculator</span></h2>
+            <div class="bmi-container">
+                <div class="card scroll-hidden">
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" placeholder="e.g., 175" min="50" max="250">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" placeholder="e.g., 70" min="20" max="300">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="age">Age (optional)</label>
+                            <input type="number" id="age" placeholder="e.g., 25" min="10" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender (optional)</label>
+                            <select id="gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="calculateBMI()">Calculate BMI</button>
+                    
+                    <div id="bmiResult" class="result-box hidden">
+                        <div class="result-value" id="bmiValue" style="color: #ff6600;">--</div>
+                        <p style="color: #888;">Body Mass Index</p>
+                        
+                        <div class="bmi-gauge">
+                            <div class="bmi-indicator" id="bmiIndicator" style="left: 0%"></div>
+                        </div>
+                        <div class="bmi-labels">
+                            <span>Underweight<br>&lt;18.5</span>
+                            <span>Normal<br>18.5-24.9</span>
+                            <span>Overweight<br>25-29.9</span>
+                            <span>Obese<br>&gt;30</span>
+                        </div>
+                        
+                        <div class="bmi-category">
+                            Category: <span id="bmiCategory" style="color: #ff6600;">--</span>
+                        </div>
+                        
+                        <div class="bmi-tips" id="bmiTips"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUTRITION PAGE -->
+    <div id="nutrition" class="page">
+        <div class="container">
+            <h2 class="section-title">Nutrition <span>Chart</span></h2>
+            
+            <div class="card scroll-hidden" style="overflow-x: auto;">
+                <table id="nutritionTable">
+                    <thead>
+                        <tr>
+                            <th>Food (per 100g)</th>
+                            <th>Calories</th>
+                            <th>Protein</th>
+                            <th>Carbs</th>
+                            <th>Fats</th>
+                            <th>Fiber</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nutritionBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Daily Recommendations</h3>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="card scroll-hidden" style="text-align: center;">
+                        <div style="font-size: 2rem; color: #ff6600; font-weight: 700;">2000-2500</div>
+                        <p style="color: #888;">Calories (Men)</p>
+                    </div>
+                    <div class="card scroll-hidden" style="text-align: center;">
+                        <div style="font-size: 2rem; color: #ff6600; font-weight: 700;">1600-2000</div>
+                        <p style="color: #888;">Calories (Women)</p>
+                    </div>
+                    <div class="card scroll-hidden" style="text-align: center;">
+                        <div style="font-size: 2rem; color: #00cc66; font-weight: 700;">50-175g</div>
+                        <p style="color: #888;">Protein Daily</p>
+                    </div>
+                    <div class="card scroll-hidden" style="text-align: center;">
+                        <div style="font-size: 2rem; color: #ffcc00; font-weight: 700;">25-30g</div>
+                        <p style="color: #888;">Fiber Daily</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROGRAMS PAGE -->
+    <div id="programs" class="page">
+        <div class="container">
+            <h2 class="section-title">Fitness <span>Programs</span></h2>
+            
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab(event,'equipment')">Equipment</button>
+                <button class="tab-btn" onclick="switchTab(event,'bodyweight')">Bodyweight</button>
+                <button class="tab-btn" onclick="switchTab(event,'bodyparts')">Body Parts</button>
+            </div>
+            
+            <!-- Equipment Tab -->
+            <div id="equipmentTab">
+                <div class="grid" id="equipmentGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Bodyweight Tab -->
+            <div id="bodyweightTab" class="hidden">
+                <div class="grid" id="bodyweightGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Body Parts Tab -->
+            <div id="bodypartsTab" class="hidden" id="bodypartsContent">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- WORKOUTS PAGE -->
+    <div id="workouts" class="page">
+        <div class="container">
+            <h2 class="section-title">Weekly <span>Workouts</span></h2>
+            <p class="scroll-hidden" style="text-align: center; max-width: 750px; margin: 0 auto 2.5rem; color: #aaa;">
+                Follow complete weekly training plans inspired by the styles of legendary bodybuilders. Start with beginner-friendly routines and progress toward more advanced splits.
+            </p>
+            <div class="tabs" id="workoutsFilter">
+                <button class="tab-btn active" data-difficulty="all" onclick="filterWorkouts('all')">All</button>
+                <button class="tab-btn" data-difficulty="beginner" onclick="filterWorkouts('beginner')">Beginner</button>
+                <button class="tab-btn" data-difficulty="intermediate" onclick="filterWorkouts('intermediate')">Intermediate</button>
+                <button class="tab-btn" data-difficulty="advanced" onclick="filterWorkouts('advanced')">Advanced</button>
+            </div>
+            <div class="grid" id="workoutsGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CARDIO PAGE -->
+    <div id="cardio" class="page">
+        <div class="container">
+            <h2 class="section-title">Cardio <span>Workouts</span></h2>
+            <div class="grid" id="cardioGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="scroll-hidden">
+                <h4>Health Fitness</h4>
+                <p>Your journey to a healthier life starts here. We provide free fitness resources for everyone.</p>
+            </div>
+            <div class="scroll-hidden">
+                <h4>Quick Links</h4>
+                <a href="#" onclick="showPage('programs')">Programs</a>
+                <a href="#" onclick="showPage('workouts')">Workouts</a>
+                <a href="#" onclick="showPage('nutrition')">Nutrition</a>
+                <a href="#" onclick="showPage('bmi')">BMI Calculator</a>
+                <a href="#" onclick="showPage('cardio')">Cardio</a>
+            </div>
+            <div class="scroll-hidden">
+                <h4>Contact</h4>
+                <p>info@healthfitness.com</p>
+                <p>+1 234 567 890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Health Fitness. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- WORKOUT MODAL -->
+    <div class="modal-overlay" id="workoutModal">
+        <div class="modal-content card scroll-hidden">
+            <button class="modal-close" onclick="closeWorkoutModal()">&times;</button>
+            <div id="workoutModalBody"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ==================== DATA ====================
+        const nutritionData = [
+            { food: "Chicken Breast", calories: 165, protein: "31g", carbs: "0g", fats: "3.6g", fiber: "0g" },
+            { food: "Salmon", calories: 208, protein: "20g", carbs: "0g", fats: "13g", fiber: "0g" },
+            { food: "Eggs (whole)", calories: 155, protein: "13g", carbs: "1.1g", fats: "11g", fiber: "0g" },
+            { food: "Greek Yogurt", calories: 100, protein: "17g", carbs: "6g", fats: "0.7g", fiber: "0g" },
+            { food: "Brown Rice", calories: 112, protein: "2.6g", carbs: "24g", fats: "0.9g", fiber: "1.8g" },
+            { food: "Quinoa", calories: 120, protein: "4.4g", carbs: "21g", fats: "1.9g", fiber: "2.8g" },
+            { food: "Sweet Potato", calories: 86, protein: "1.6g", carbs: "20g", fats: "0.1g", fiber: "3g" },
+            { food: "Oatmeal", calories: 68, protein: "2.4g", carbs: "12g", fats: "1.4g", fiber: "1.7g" },
+            { food: "Broccoli", calories: 34, protein: "2.8g", carbs: "7g", fats: "0.4g", fiber: "2.6g" },
+            { food: "Spinach", calories: 23, protein: "2.9g", carbs: "3.6g", fats: "0.4g", fiber: "2.2g" },
+            { food: "Almonds", calories: 579, protein: "21g", carbs: "22g", fats: "50g", fiber: "12g" },
+            { food: "Banana", calories: 89, protein: "1.1g", carbs: "23g", fats: "0.3g", fiber: "2.6g" },
+            { food: "Avocado", calories: 160, protein: "2g", carbs: "9g", fats: "15g", fiber: "7g" },
+            { food: "Lean Beef", calories: 250, protein: "26g", carbs: "0g", fats: "15g", fiber: "0g" },
+            { food: "Tuna", calories: 132, protein: "28g", carbs: "0g", fats: "1g", fiber: "0g" },
+            { food: "Cottage Cheese", calories: 98, protein: "11g", carbs: "3.4g", fats: "4.3g", fiber: "0g" }
+        ];
+
+        const equipmentExercises = [
+            { name: "Chest Workout", desc: "Build strength and muscle", sets: "4 sets × 10 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Db-Press.jpeg" },
+            { name: "Barbell Squat", desc: "Build strength and muscle", sets: "4 sets × 8 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Bb-Squat.jpeg" },
+            { name: "Cabel Rows", desc: "Build strength and muscle", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Cr-Rows.jpeg" },
+            { name: "Leg Press", desc: "Build strength and muscle", sets: "4 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Lp-Press.jpeg" },
+            { name: "Lat Pull Down", desc: "Build strength and muscle", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Lat-Pull.jpeg" },
+            { name: "Shoulder Press", desc: "Build strength and muscle", sets: "4 sets × 10 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Sp-Press.jpeg" },
+            { name: "Bicep Curls", desc: "Build strength and muscle", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Bc-Curls.jpeg" },
+            { name: "Tricep Extension", desc: "Build strength and muscle", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Te-Extension.jpeg" },
+            { name: "Leg Curls", desc: "Build strength and muscle", sets: "3 sets × 15 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Lc-Curls.jpeg" },
+         ];
+
+        const bodyweightExercises = [
+            { name: "Push Ups", sets: "3 sets × 15 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Pu-Ups.jpeg" },
+            { name: "Pull Ups", sets: "3 sets × 8 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Pl-Ups.jpeg" },
+            { name: "Bodyweight Squat", sets: "4 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Squats-Sits.jpeg" },
+            { name: "Planks", sets: "3 sets × 45 sec", image: "C:/Users/Supriyap/Desktop/HealthFit/Planks-Hold.jpeg" },
+            { name: "Tricep Dips", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Td-Push.jpeg" },
+            { name: "Lunges", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Lu-Legs.jpeg" },
+            { name: "Core", sets: "3 sets × 15 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Co-Still.jpeg" },
+            { name: "Leg Raises", sets: "3 sets × 12 reps", image: "C:/Users/Supriyap/Desktop/HealthFit/Lr-Ups.jpeg" },
+
+];
+
+        const bodyPartsData = {
+            chest: {
+                title: "Chest Workout",
+                exercises: [
+                    { icon: "BP", name: "Bench Press", sets: "4 sets × 8 reps", type: "equipment" },
+                    { icon: "PU", name: "Push-ups", sets: "3 sets × 15 reps", type: "bodyweight" },
+                    { icon: "IF", name: "Incline Flyes", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "DP", name: "Dumbbell Press", sets: "4 sets × 10 reps", type: "equipment" },
+                    { icon: "CC", name: "Cable Crossover", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "DI", name: "Chest Dips", sets: "3 sets × 10 reps", type: "bodyweight" },
+                    { icon: "PP", name: "Pec Deck", sets: "3 sets × 15 reps", type: "equipment" }
+                ]
+            },
+            back: {
+                title: "Back Workout",
+                exercises: [
+                    { icon: "DL", name: "Deadlift", sets: "4 sets × 6 reps", type: "equipment" },
+                    { icon: "PU", name: "Pull-ups", sets: "3 sets × 8 reps", type: "bodyweight" },
+                    { icon: "BR", name: "Barbell Rows", sets: "4 sets × 10 reps", type: "equipment" },
+                    { icon: "LP", name: "Lat Pulldown", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "CR", name: "Cable Rows", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "FS", name: "Face Pulls", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "TY", name: "T-Bar Rows", sets: "4 sets × 8 reps", type: "equipment" }
+                ]
+            },
+            legs: {
+                title: "Legs Workout",
+                exercises: [
+                    { icon: "SQ", name: "Squats", sets: "4 sets × 8 reps", type: "equipment" },
+                    { icon: "LG", name: "Lunges", sets: "3 sets × 12 reps", type: "bodyweight" },
+                    { icon: "LP", name: "Leg Press", sets: "4 sets × 12 reps", type: "equipment" },
+                    { icon: "LC", name: "Leg Curls", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "LE", name: "Leg Extensions", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "CR", name: "Calf Raises", sets: "4 sets × 20 reps", type: "bodyweight" },
+                    { icon: "RD", name: "Romanian Deadlift", sets: "3 sets × 10 reps", type: "equipment" }
+                ]
+            },
+            arms: {
+                title: "Arms Workout",
+                exercises: [
+                    { icon: "BC", name: "Barbell Curls", sets: "4 sets × 10 reps", type: "equipment" },
+                    { icon: "TD", name: "Tricep Dips", sets: "3 sets × 12 reps", type: "bodyweight" },
+                    { icon: "HC", name: "Hammer Curls", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "TE", name: "Tricep Extensions", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "CC", name: "Concentration Curls", sets: "3 sets × 10 reps", type: "equipment" }
+                ]
+            },
+            shoulders: {
+                title: "Shoulders Workout",
+                exercises: [
+                    { icon: "OP", name: "Overhead Press", sets: "4 sets × 8 reps", type: "equipment" },
+                    { icon: "LR", name: "Lateral Raises", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "FR", name: "Front Raises", sets: "3 sets × 12 reps", type: "equipment" },
+                    { icon: "RD", name: "Rear Delt Flyes", sets: "3 sets × 15 reps", type: "equipment" },
+                    { icon: "SH", name: "Shrugs", sets: "4 sets × 12 reps", type: "equipment" }
+                ]
+            }
+        };
+
+        const cardioData = [
+            { name: "Running", duration: "20-30 min", intensity: "moderate", calories: 300, icon: "🏃", image: "C:/Users/Supriyap/Desktop/HealthFit/Running-cardio.jpeg" },
+            { name: "Jump Rope", duration: "15-20 min", intensity: "high", calories: 250, icon: "🪢", image: "C:/Users/Supriyap/Desktop/HealthFit/JumpRope-cardio.jpeg" },
+            { name: "Cycling", duration: "30-45 min", intensity: "moderate", calories: 350, icon: "🚴", image: "C:/Users/Supriyap/Desktop/HealthFit/Cycling-cardio.jpeg" },
+            { name: "Burpees", duration: "10-15 min", intensity: "high", calories: 200, icon: "💥", image: "C:/Users/Supriyap/Desktop/HealthFit/Burpees-cardio.jpeg" },
+            { name: "Swimming", duration: "30-40 min", intensity: "moderate", calories: 400, icon: "🏊", image: "C:/Users/Supriyap/Desktop/HealthFit/Swiming-cardio.jpeg" },
+            { name: "Rowing", duration: "20-30 min", intensity: "high", calories: 320, icon: "🚣", image: "C:/Users/Supriyap/Desktop/HealthFit/Rowing-cardio.jpeg" },
+            { name: "Stair Climbing", duration: "15-25 min", intensity: "high", calories: 280, icon: "🪜", image: "C:/Users/Supriyap/Desktop/HealthFit/StairClimbing-cardio.jpeg" },
+            { name: "Elliptical", duration: "25-35 min", intensity: "moderate", calories: 300, icon: "🏋️", image: "C:/Users/Supriyap/Desktop/HealthFit/Elliptical-cardio.jpeg" },
+            { name: "High Knees", duration: "10-15 min", intensity: "high", calories: 180, icon: "🦵", image: "C:/Users/Supriyap/Desktop/HealthFit/HighKnees-cardio.jpeg" },
+            { name: "Box Jumps", duration: "10-15 min", intensity: "high", calories: 220, icon: "📦", image: "C:/Users/Supriyap/Desktop/HealthFit/BoxJumps-cardio.jpeg" },
+            { name: "Dancing", duration: "30-45 min", intensity: "moderate", calories: 250, icon: "💃", image: "C:/Users/Supriyap/Desktop/HealthFit/Dancing-cardio.jpeg" },
+            { name: "Kickboxing", duration: "20-30 min", intensity: "high", calories: 350, icon: "🥊", image: "C:/Users/Supriyap/Desktop/HealthFit/KickBoxing-cardio.jpeg" }
+        ];
+
+        const workoutPlans = [
+            {
+                id: 'beginner-fullbody-3day',
+                name: 'Beginner Full-Body Foundation',
+                inspiredBy: 'beginner phases of many classic bodybuilders',
+                difficulty: 'beginner',
+                daysPerWeek: 3,
+                goal: 'Foundation & Technique',
+                description: 'A 3-day full-body routine focused on learning form, building balanced strength, and recovering well.',
+                days: [
+                    {
+                        name: 'Day 1 – Full Body A',
+                        focus: 'Chest, Back, Legs, Core',
+                        notes: 'Use light to moderate weights and stop 2–3 reps before failure.',
+                        exercises: [
+                            { name: 'Goblet Squat', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Flat Dumbbell Press', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Lat Pulldown', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Plank', sets: '3', reps: '30 sec hold', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Rest / Light Cardio',
+                        focus: 'Recovery, Light Movement',
+                        notes: 'Optional 20–30 minutes of easy walking or cycling.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 3 – Full Body B',
+                        focus: 'Legs, Shoulders, Back, Core',
+                        notes: 'Keep one clean rep in reserve on every set.',
+                        exercises: [
+                            { name: 'Romanian Deadlift', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Seated Dumbbell Shoulder Press', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Cable Row', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Hanging Knee Raise', sets: '3', reps: '10–12', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Rest',
+                        focus: 'Full Recovery',
+                        notes: 'Focus on sleep, hydration, and light stretching.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 5 – Full Body C',
+                        focus: 'Chest, Back, Legs, Arms',
+                        notes: 'Slightly higher reps for more mind–muscle connection.',
+                        exercises: [
+                            { name: 'Leg Press', sets: '3', reps: '12–15', rest: '90 sec' },
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'One-Arm Dumbbell Row', sets: '3', reps: '10–12 each side', rest: '90 sec' },
+                            { name: 'EZ-Bar Curl', sets: '2', reps: '10–12', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Optional Active Recovery',
+                        focus: 'Mobility, Steps',
+                        notes: '10–15 minutes of mobility work and 6–8k steps.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Complete Rest',
+                        notes: 'Prepare for the next week, review your progress.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'beginner-upper-lower-4day',
+                name: 'Beginner Upper / Lower Split',
+                inspiredBy: 'simplified pro-style upper/lower routines',
+                difficulty: 'beginner',
+                daysPerWeek: 4,
+                goal: 'Strength & Muscle Base',
+                description: 'A 4-day split to build strength and muscle evenly, perfect after 1–2 months of full-body training.',
+                days: [
+                    {
+                        name: 'Day 1 – Upper A',
+                        focus: 'Chest, Back, Shoulders, Arms',
+                        notes: 'Use a weight you can control with perfect form.',
+                        exercises: [
+                            { name: 'Flat Barbell Bench Press', sets: '3', reps: '6–8', rest: '120 sec' },
+                            { name: 'Barbell Row', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Seated Dumbbell Shoulder Press', sets: '3', reps: '10', rest: '90 sec' },
+                            { name: 'Cable Tricep Pushdown', sets: '2', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Lower A',
+                        focus: 'Quads, Hamstrings, Glutes, Calves',
+                        notes: 'Take your time on squats and keep your core tight.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '10–12', rest: '120 sec' },
+                            { name: 'Leg Curl', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Standing Calf Raise', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Rest / Light Cardio',
+                        focus: 'Recovery',
+                        notes: '20–30 minutes of light cardio and stretching.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 4 – Upper B',
+                        focus: 'Back, Chest, Arms',
+                        notes: 'Slightly higher reps, chase the pump without sacrificing form.',
+                        exercises: [
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Lat Pulldown', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Dumbbell Curl', sets: '2', reps: '10–12', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Lower B',
+                        focus: 'Posterior Chain, Glutes, Calves',
+                        notes: 'Focus on hip hinge movements and control.',
+                        exercises: [
+                            { name: 'Romanian Deadlift', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Walking Lunges', sets: '3', reps: '10–12 steps each leg', rest: '90 sec' },
+                            { name: 'Leg Extension', sets: '2', reps: '12–15', rest: '60 sec' },
+                            { name: 'Seated Calf Raise', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Optional Light Cardio',
+                        focus: 'Steps, Easy Cardio',
+                        notes: '15–25 minutes at a conversational pace.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'No structured training, focus on recovery.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'intermediate-bro-split',
+                name: 'Classic 5-Day Bro Split',
+                inspiredBy: 'golden-era bodybuilding chest/back/arms days',
+                difficulty: 'intermediate',
+                daysPerWeek: 5,
+                goal: 'Hypertrophy',
+                description: 'A classic bodybuilder-style split with one main muscle group focus per day and moderate-to-high volume.',
+                days: [
+                    {
+                        name: 'Day 1 – Chest',
+                        focus: 'Chest, Triceps (secondary)',
+                        notes: 'Push close to failure on the last set of each exercise.',
+                        exercises: [
+                            { name: 'Flat Barbell Bench Press', sets: '4', reps: '6–8', rest: '150 sec' },
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Cable Fly', sets: '3', reps: '12–15', rest: '60–90 sec' },
+                            { name: 'Dips (Assisted if needed)', sets: '3', reps: '8–10', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Back',
+                        focus: 'Lats, Mid-back, Lower back',
+                        notes: 'Keep your torso stable and avoid using momentum.',
+                        exercises: [
+                            { name: 'Deadlift', sets: '3', reps: '4–6', rest: '180 sec' },
+                            { name: 'Weighted Pull-Up or Lat Pulldown', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Chest-Supported Row', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Straight-Arm Pulldown', sets: '2', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Shoulders',
+                        focus: 'Delts, Upper traps',
+                        notes: 'Prioritize controlled tempo over heavy ego lifting.',
+                        exercises: [
+                            { name: 'Standing Overhead Press', sets: '4', reps: '6–8', rest: '150 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Rear Delt Fly (Machine or Dumbbell)', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Barbell Shrug', sets: '3', reps: '10–12', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Arms',
+                        focus: 'Biceps, Triceps',
+                        notes: 'Chase the pump; keep rest shorter on isolation movements.',
+                        exercises: [
+                            { name: 'Barbell Curl', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Skull Crusher', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Hammer Curl', sets: '3', reps: '10–12', rest: '60–90 sec' },
+                            { name: 'Cable Tricep Pushdown', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Legs',
+                        focus: 'Quads, Hamstrings, Glutes, Calves',
+                        notes: 'This is a demanding day; warm up thoroughly.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '4', reps: '6–8', rest: '150–180 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '10–12', rest: '120 sec' },
+                            { name: 'Romanian Deadlift', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Seated Calf Raise', sets: '4', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Optional Light Cardio',
+                        focus: 'Conditioning, Recovery',
+                        notes: 'Easy cardio 20–30 minutes or complete rest.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Full Rest',
+                        notes: 'Focus on food quality, hydration, and sleep.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'intermediate-push-pull-legs',
+                name: 'Push / Pull / Legs (4–5 Days)',
+                inspiredBy: 'modern physique athletes push/pull/legs structures',
+                difficulty: 'intermediate',
+                daysPerWeek: 4,
+                goal: 'Balanced Strength & Size',
+                description: 'A flexible push/pull/legs split that you can run 4 or 5 days per week depending on recovery.',
+                days: [
+                    {
+                        name: 'Day 1 – Push',
+                        focus: 'Chest, Shoulders, Triceps',
+                        notes: 'Prioritize compound presses, then chase the pump on isolation work.',
+                        exercises: [
+                            { name: 'Barbell Bench Press', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Seated Dumbbell Shoulder Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Cable Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Pull',
+                        focus: 'Back, Rear Delts, Biceps',
+                        notes: 'Use straps if grip limits your back work.',
+                        exercises: [
+                            { name: 'Weighted Pull-Up or Lat Pulldown', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Barbell or T-Bar Row', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Single-Arm Dumbbell Row', sets: '3', reps: '10–12 each side', rest: '90 sec' },
+                            { name: 'Face Pull', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Legs',
+                        focus: 'Quads, Hamstrings, Glutes, Calves',
+                        notes: 'Keep good depth on squats; don’t rush your sets.',
+                        exercises: [
+                            { name: 'Back or Front Squat', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '10–12', rest: '120 sec' },
+                            { name: 'Lying Leg Curl', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Standing Calf Raise', sets: '4', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Rest / Active Recovery',
+                        focus: 'Recovery',
+                        notes: 'Optional light cardio, stretching, or mobility.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 5 – Optional Repeat (Push)',
+                        focus: 'Chest, Shoulders, Triceps (variation)',
+                        notes: 'Use slightly different angles and rep ranges than Day 1.',
+                        exercises: [
+                            { name: 'Incline Barbell Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Machine Shoulder Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Cable Chest Fly', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Overhead Tricep Extension', sets: '3', reps: '10–12', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Rest',
+                        focus: 'Full Rest',
+                        notes: 'Take this fully off if recovery feels low.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest or Very Light Cardio',
+                        focus: 'Recovery, Steps',
+                        notes: 'Walk, light cycling, or complete rest.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'intermediate-arnold-style',
+                name: 'Arnold-Inspired Volume Split',
+                inspiredBy: 'Arnold-style chest/back & high-volume training',
+                difficulty: 'intermediate',
+                daysPerWeek: 5,
+                goal: 'High-Volume Hypertrophy',
+                description: 'A higher-volume routine inspired by Arnold-era training, adapted to be realistic for non-professionals.',
+                days: [
+                    {
+                        name: 'Day 1 – Chest & Back',
+                        focus: 'Chest, Lats, Mid-back',
+                        notes: 'Superset one chest move with one back move where possible.',
+                        exercises: [
+                            { name: 'Incline Barbell Press', sets: '4', reps: '8–10', rest: '90 sec between supersets' },
+                            { name: 'Wide-Grip Pull-Up or Pulldown', sets: '4', reps: '8–10', rest: '90 sec between supersets' },
+                            { name: 'Flat Dumbbell Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Bent-Over Row', sets: '3', reps: '8–10', rest: '120 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Shoulders & Arms',
+                        focus: 'Delts, Biceps, Triceps',
+                        notes: 'Higher reps and shorter rest for a big pump.',
+                        exercises: [
+                            { name: 'Seated Dumbbell Press', sets: '4', reps: '8–10', rest: '90 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '4', reps: '12–15', rest: '60 sec' },
+                            { name: 'Barbell Curl', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Close-Grip Bench or Dip', sets: '3', reps: '8–10', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Legs',
+                        focus: 'Quads, Hamstrings, Calves',
+                        notes: 'Classic heavy squats followed by volume accessories.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '4', reps: '6–8', rest: '150–180 sec' },
+                            { name: 'Leg Press', sets: '4', reps: '10–12', rest: '120 sec' },
+                            { name: 'Lying Leg Curl', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Standing Calf Raise', sets: '4', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Rest or Light Cardio',
+                        focus: 'Recovery',
+                        notes: 'Walk or cycle at an easy pace for 20–30 minutes.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 5 – Chest & Back (Variation)',
+                        focus: 'Upper chest, Upper back',
+                        notes: 'Use slightly different angles and rep ranges than Day 1.',
+                        exercises: [
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Pull-Up or Pulldown (neutral grip)', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Cable Fly (High to Low)', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Seated Cable Row', sets: '3', reps: '10–12', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Shoulders & Arms (Variation)',
+                        focus: 'Side delts, rear delts, arm detail',
+                        notes: 'Emphasize time under tension and strict form.',
+                        exercises: [
+                            { name: 'Machine Shoulder Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Cable Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Incline Dumbbell Curl', sets: '3', reps: '10–12', rest: '60–90 sec' },
+                            { name: 'Overhead Rope Extension', sets: '3', reps: '10–12', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'Take the day off, recover, and fuel up.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'advanced-heavy-powerbuilding',
+                name: 'Advanced Powerbuilding Split',
+                inspiredBy: 'strength-focused bodybuilders mixing power and size work',
+                difficulty: 'advanced',
+                daysPerWeek: 4,
+                goal: 'Strength & Size',
+                description: 'A heavy 4-day plan that blends powerlifting-style main lifts with bodybuilding accessories.',
+                days: [
+                    {
+                        name: 'Day 1 – Heavy Squat Focus',
+                        focus: 'Squat, Quads, Posterior chain',
+                        notes: 'Use long rest for heavy sets; reduce load if form breaks.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '5', reps: '3–5', rest: '180 sec', },
+                            { name: 'Paused Squat', sets: '2', reps: '3–4', rest: '150 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Leg Curl', sets: '3', reps: '10–12', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Heavy Bench Focus',
+                        focus: 'Bench, Chest, Triceps',
+                        notes: 'Work up to a top set, then back-off volume work.',
+                        exercises: [
+                            { name: 'Flat Barbell Bench Press', sets: '5', reps: '3–5', rest: '180 sec' },
+                            { name: 'Close-Grip Bench Press', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Rope Tricep Pushdown', sets: '3', reps: '12–15', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Rest / Very Light Cardio',
+                        focus: 'Recovery',
+                        notes: 'Walk 20–30 minutes or complete rest.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 4 – Heavy Deadlift Focus',
+                        focus: 'Posterior chain, Back, Grip',
+                        notes: 'Keep reps low and technique perfect.',
+                        exercises: [
+                            { name: 'Conventional or Sumo Deadlift', sets: '4', reps: '3–5', rest: '180–210 sec' },
+                            { name: 'Barbell Row', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Lat Pulldown', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Back Extension', sets: '3', reps: '10–12', rest: '90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Hypertrophy Upper',
+                        focus: 'Chest, Back, Shoulders, Arms',
+                        notes: 'Higher reps and more variety for size.',
+                        exercises: [
+                            { name: 'Incline Barbell Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Seated Cable Row', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'EZ-Bar Curl', sets: '3', reps: '10–12', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Rest',
+                        focus: 'Rest',
+                        notes: 'Full rest, focus on nutrition and sleep.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Optional Pump Day',
+                        focus: 'Arms, Delts (light)',
+                        notes: 'Only if recovery is good; keep intensity moderate.',
+                        exercises: [
+                            { name: 'Cable Curl', sets: '2', reps: '12–15', rest: '60 sec' },
+                            { name: 'Rope Pushdown', sets: '2', reps: '12–15', rest: '60 sec' },
+                            { name: 'Machine Lateral Raise', sets: '2', reps: '15', rest: '45–60 sec' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'advanced-yates-hit',
+                name: 'High-Intensity HIT Style',
+                inspiredBy: 'Dorian Yates-style low-volume, high-intensity training',
+                difficulty: 'advanced',
+                daysPerWeek: 4,
+                goal: 'Max Effort Sets',
+                description: 'A low-volume routine focusing on 1–2 all-out working sets per exercise, inspired by HIT methods.',
+                days: [
+                    {
+                        name: 'Day 1 – Chest & Biceps',
+                        focus: 'Pecs, Biceps',
+                        notes: '2–3 warm-up sets, then 1–2 all-out working sets near failure.',
+                        exercises: [
+                            { name: 'Incline Barbell Press', sets: '1–2 hard sets after warm-up', reps: '6–8', rest: '180 sec' },
+                            { name: 'Flat Dumbbell Press', sets: '1–2 hard sets', reps: '8–10', rest: '150 sec' },
+                            { name: 'Cable Fly', sets: '1–2 hard sets', reps: '10–12', rest: '120 sec' },
+                            { name: 'Barbell Curl', sets: '1–2 hard sets', reps: '8–10', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Back',
+                        focus: 'Lats, Mid-back',
+                        notes: 'Heavy, controlled reps with full range of motion.',
+                        exercises: [
+                            { name: 'Weighted Pull-Up or Heavy Pulldown', sets: '1–2 hard sets', reps: '6–8', rest: '180 sec' },
+                            { name: 'Bent-Over Row', sets: '1–2 hard sets', reps: '6–8', rest: '180 sec' },
+                            { name: 'Machine Row', sets: '1–2 hard sets', reps: '8–10', rest: '150 sec' },
+                            { name: 'Straight-Arm Pulldown', sets: '1–2 hard sets', reps: '10–12', rest: '120 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Rest',
+                        focus: 'Recovery',
+                        notes: 'This style is demanding; prioritize recovery.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 4 – Legs',
+                        focus: 'Quads, Hamstrings, Glutes',
+                        notes: 'Warm up thoroughly before heavy sets.',
+                        exercises: [
+                            { name: 'Leg Press or Hack Squat', sets: '1–2 hard sets', reps: '8–10', rest: '210 sec' },
+                            { name: 'Romanian Deadlift', sets: '1–2 hard sets', reps: '6–8', rest: '180 sec' },
+                            { name: 'Leg Curl', sets: '1–2 hard sets', reps: '10–12', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Shoulders & Triceps',
+                        focus: 'Delts, Triceps',
+                        notes: 'Use controlled reps, no bouncing or cheating.',
+                        exercises: [
+                            { name: 'Seated Shoulder Press', sets: '1–2 hard sets', reps: '6–8', rest: '180 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '1–2 hard sets', reps: '10–12', rest: '120 sec' },
+                            { name: 'Rear Delt Machine', sets: '1–2 hard sets', reps: '10–12', rest: '120 sec' },
+                            { name: 'Close-Grip Bench or Dip', sets: '1–2 hard sets', reps: '8–10', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Rest / Light Cardio',
+                        focus: 'Active Recovery',
+                        notes: 'Walking, cycling, or stretching only.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'Full rest to recover for the next cycle.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'intermediate-fat-loss',
+                name: 'Physique Fat-Loss Circuit Week',
+                inspiredBy: 'bodybuilder-style conditioning blocks',
+                difficulty: 'intermediate',
+                daysPerWeek: 4,
+                goal: 'Fat Loss & Conditioning',
+                description: 'Circuit-style sessions combining weights and cardio to burn fat while maintaining muscle.',
+                days: [
+                    {
+                        name: 'Day 1 – Full-Body Circuit A',
+                        focus: 'Full body, Higher heart rate',
+                        notes: 'Move from exercise to exercise with minimal rest, rest 2–3 minutes between circuits.',
+                        exercises: [
+                            { name: 'Goblet Squat', sets: '3 circuits', reps: '12', rest: '0 sec between moves' },
+                            { name: 'Push-Up', sets: '3 circuits', reps: '12', rest: '0 sec between moves' },
+                            { name: 'Bent-Over Dumbbell Row', sets: '3 circuits', reps: '12', rest: '0 sec between moves' },
+                            { name: 'Mountain Climbers', sets: '3 circuits', reps: '30 sec', rest: '2–3 min between circuits' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Cardio Intervals',
+                        focus: 'Conditioning',
+                        notes: '10 rounds of 30 sec hard, 60 sec easy on your chosen cardio.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 3 – Rest or Light Walk',
+                        focus: 'Recovery',
+                        notes: 'Aim for 6–10k steps at an easy pace.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 4 – Full-Body Circuit B',
+                        focus: 'Full body, Emphasis on posterior chain',
+                        notes: 'Keep the weight moderate; form first.',
+                        exercises: [
+                            { name: 'Romanian Deadlift', sets: '3 circuits', reps: '10', rest: '0 sec between moves' },
+                            { name: 'Dumbbell Shoulder Press', sets: '3 circuits', reps: '10', rest: '0 sec between moves' },
+                            { name: 'Lat Pulldown', sets: '3 circuits', reps: '10', rest: '0 sec between moves' },
+                            { name: 'Rowing Machine', sets: '3 circuits', reps: '30 sec', rest: '2–3 min between circuits' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Moderate Steady-State Cardio',
+                        focus: 'Endurance, Fat loss',
+                        notes: '30–40 minutes at a pace where you can still talk.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 6 – Optional Circuit C',
+                        focus: 'Core and Upper-Body Conditioning',
+                        notes: 'Only if recovery is good; reduce volume if necessary.',
+                        exercises: [
+                            { name: 'Plank', sets: '3 circuits', reps: '30–40 sec', rest: '0 sec between moves' },
+                            { name: 'Kettlebell Swing', sets: '3 circuits', reps: '15', rest: '0 sec between moves' },
+                            { name: 'Battle Ropes or Shadow Boxing', sets: '3 circuits', reps: '30 sec', rest: '2–3 min between circuits' }
+                        ]
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Full Rest',
+                        notes: 'Good sleep and nutrition will drive fat loss along with training.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'beginner-home-bodyweight',
+                name: 'Beginner Home Bodyweight Week',
+                inspiredBy: 'minimal-equipment routines used by many pros early on',
+                difficulty: 'beginner',
+                daysPerWeek: 3,
+                goal: 'General Fitness & Habit Building',
+                description: 'No gym required – simple bodyweight sessions 3 times per week to build consistency and base strength.',
+                days: [
+                    {
+                        name: 'Day 1 – Upper Body',
+                        focus: 'Chest, Back, Arms, Core',
+                        notes: 'Stay a couple reps away from failure on each set.',
+                        exercises: [
+                            { name: 'Push-Ups (incline if needed)', sets: '3', reps: '8–15', rest: '60–90 sec' },
+                            { name: 'Inverted Row (table/low bar) or Band Row', sets: '3', reps: '8–12', rest: '60–90 sec' },
+                            { name: 'Bench or Chair Dips', sets: '2', reps: '8–12', rest: '60–90 sec' },
+                            { name: 'Dead Bug or Crunch', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Rest / Walk',
+                        focus: 'Recovery',
+                        notes: 'Aim for 6–8k steps at an easy pace.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 3 – Lower Body',
+                        focus: 'Quads, Glutes, Hamstrings',
+                        notes: 'Control your tempo on the way down in every rep.',
+                        exercises: [
+                            { name: 'Bodyweight Squat', sets: '3', reps: '12–15', rest: '60–90 sec' },
+                            { name: 'Reverse Lunge', sets: '3', reps: '8–10 each leg', rest: '60–90 sec' },
+                            { name: 'Glute Bridge', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Calf Raise (on step)', sets: '3', reps: '15–20', rest: '45–60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Rest',
+                        focus: 'Rest',
+                        notes: 'Stretch or do light mobility if you feel stiff.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 5 – Full-Body Mix',
+                        focus: 'Full body, Higher heart rate',
+                        notes: 'Move between exercises with relatively short rest.',
+                        exercises: [
+                            { name: 'Push-Up', sets: '3', reps: '8–15', rest: '60 sec' },
+                            { name: 'Bodyweight Squat', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Hip Hinge Good Morning (no weight)', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Plank', sets: '3', reps: '30 sec hold', rest: '45–60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Light Activity',
+                        focus: 'Walking, Mobility',
+                        notes: 'Easy 20–30 minutes of activity.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'Celebrate finishing the week and plan the next.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'advanced-6day-physique',
+                name: '6-Day Physique Split',
+                inspiredBy: 'modern bodybuilding 6-day push/pull/legs variants',
+                difficulty: 'advanced',
+                daysPerWeek: 6,
+                goal: 'Maximal Hypertrophy',
+                description: 'A high-frequency, high-volume split for experienced lifters with good recovery and nutrition.',
+                days: [
+                    {
+                        name: 'Day 1 – Push (Heavy)',
+                        focus: 'Chest, Front delts, Triceps',
+                        notes: 'Heavier compound focus with longer rest.',
+                        exercises: [
+                            { name: 'Barbell Bench Press', sets: '4', reps: '5–7', rest: '180 sec' },
+                            { name: 'Incline Barbell Press', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Standing Overhead Press', sets: '3', reps: '6–8', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Pull (Heavy)',
+                        focus: 'Back thickness, Biceps',
+                        notes: 'Use straps if grip is limiting heavy sets.',
+                        exercises: [
+                            { name: 'Deadlift or Rack Pull', sets: '3', reps: '3–5', rest: '210 sec' },
+                            { name: 'Bent-Over Row', sets: '3', reps: '6–8', rest: '180 sec' },
+                            { name: 'Weighted Pull-Up', sets: '3', reps: '6–8', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Legs (Heavy)',
+                        focus: 'Quads, Hamstrings, Glutes',
+                        notes: 'This is demanding – warm-up and respect fatigue.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '4', reps: '5–7', rest: '180 sec' },
+                            { name: 'Romanian Deadlift', sets: '3', reps: '6–8', rest: '150 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '8–10', rest: '150 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 4 – Push (Volume)',
+                        focus: 'Chest, Shoulders, Triceps Hypertrophy',
+                        notes: 'More sets and higher reps at lighter loads.',
+                        exercises: [
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Machine Chest Press', sets: '3', reps: '12–15', rest: '90 sec' },
+                            { name: 'Cable Lateral Raise', sets: '4', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Pull (Volume)',
+                        focus: 'Back width, Rear delts, Arms',
+                        notes: 'Focus on stretch and squeeze, not just weight.',
+                        exercises: [
+                            { name: 'Lat Pulldown (wide or neutral)', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Seated Cable Row', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Face Pull', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Legs (Volume)',
+                        focus: 'Quads emphasis, Calves',
+                        notes: 'Expect a big pump; keep intensity high but safe.',
+                        exercises: [
+                            { name: 'Leg Press', sets: '4', reps: '10–12', rest: '120 sec' },
+                            { name: 'Walking Lunges', sets: '3', reps: '12–15 steps each leg', rest: '90 sec' },
+                            { name: 'Leg Extension', sets: '3', reps: '12–15', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'Completely off, or 20 minutes light walking only.',
+                        exercises: []
+                    }
+                ]
+            },
+            {
+                id: 'intermediate-classic-4day',
+                name: 'Classic 4-Day Bodybuilder Split',
+                inspiredBy: 'old-school chest/back/legs/shoulders+arms weeks',
+                difficulty: 'intermediate',
+                daysPerWeek: 4,
+                goal: 'Size & Shape',
+                description: 'A simple 4-day routine with one main focus per session, ideal for people training Monday–Thursday or Monday–Friday.',
+                days: [
+                    {
+                        name: 'Day 1 – Chest & Triceps',
+                        focus: 'Chest, Triceps',
+                        notes: 'Slow eccentrics and strong lockouts.',
+                        exercises: [
+                            { name: 'Flat Barbell Bench Press', sets: '4', reps: '6–8', rest: '150 sec' },
+                            { name: 'Incline Dumbbell Press', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Cable Fly', sets: '3', reps: '12–15', rest: '60–90 sec' },
+                            { name: 'Overhead Tricep Extension', sets: '3', reps: '10–12', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 2 – Back & Biceps',
+                        focus: 'Back width & thickness, Biceps',
+                        notes: 'Full stretch at the bottom of every pull.',
+                        exercises: [
+                            { name: 'Pull-Up or Lat Pulldown', sets: '4', reps: '8–10', rest: '120 sec' },
+                            { name: 'Barbell Row', sets: '3', reps: '8–10', rest: '120 sec' },
+                            { name: 'Seated Cable Row', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Dumbbell Curl', sets: '3', reps: '10–12', rest: '60–90 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 3 – Rest or Light Cardio',
+                        focus: 'Recovery',
+                        notes: 'Optional 20–30 minutes light cardio.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 4 – Legs',
+                        focus: 'Quads, Hamstrings, Glutes, Calves',
+                        notes: 'Take your time with warm-ups before heavier sets.',
+                        exercises: [
+                            { name: 'Back Squat', sets: '4', reps: '6–8', rest: '150–180 sec' },
+                            { name: 'Leg Press', sets: '3', reps: '10–12', rest: '120 sec' },
+                            { name: 'Lying Leg Curl', sets: '3', reps: '10–12', rest: '90 sec' },
+                            { name: 'Standing Calf Raise', sets: '4', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 5 – Shoulders & Arms',
+                        focus: 'Delts, Biceps, Triceps',
+                        notes: 'Shorter rest, higher reps for a big pump.',
+                        exercises: [
+                            { name: 'Seated Dumbbell Press', sets: '3', reps: '8–10', rest: '90 sec' },
+                            { name: 'Dumbbell Lateral Raise', sets: '3', reps: '12–15', rest: '60 sec' },
+                            { name: 'Barbell Curl', sets: '3', reps: '10–12', rest: '60–90 sec' },
+                            { name: 'Rope Tricep Pushdown', sets: '3', reps: '12–15', rest: '60 sec' }
+                        ]
+                    },
+                    {
+                        name: 'Day 6 – Rest',
+                        focus: 'Rest',
+                        notes: 'Light movement and stretching only.',
+                        exercises: []
+                    },
+                    {
+                        name: 'Day 7 – Rest',
+                        focus: 'Rest',
+                        notes: 'Mentally reset for the next week.',
+                        exercises: []
+                    }
+                ]
+            }
+        ];
+
+        // ==================== STATE ====================
+        let user = null;
+        let authMode = 'login';
+
+        // ==================== SCROLL ANIMATION ====================
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scroll-show');
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function observeElements() {
+            const elements = document.querySelectorAll('.scroll-hidden');
+            elements.forEach(el => scrollObserver.observe(el));
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderNutritionTable();
+            renderEquipmentExercises();
+            renderBodyweightExercises();
+            renderBodyParts();
+            renderCardioWorkouts();
+            renderWorkoutPlans();
+            checkSavedSession();
+            
+            // Initialize animations
+            observeElements();
+
+            // Close workout modal on overlay click
+            const workoutModal = document.getElementById('workoutModal');
+            workoutModal.addEventListener('click', (e) => {
+                if (e.target === workoutModal) {
+                    closeWorkoutModal();
+                }
+            });
+
+            // Close modal on Escape
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeWorkoutModal();
+                }
+            });
+        });
+
+        // ==================== NAVIGATION ====================
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            document.querySelectorAll('.nav-links button[data-page]').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.page === pageName) btn.classList.add('active');
+            });
+            
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+            document.querySelector('.hamburger').classList.remove('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Re-trigger observer for the new page elements
+            setTimeout(observeElements, 100);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.querySelector('.hamburger').classList.toggle('active');
+        }
+
+        // ==================== TOAST NOTIFICATIONS ====================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ==================== AUTH FUNCTIONS ====================
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeOffIcon = document.getElementById('eyeOffIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.style.display = 'none';
+                eyeOffIcon.style.display = 'block';
+                document.getElementById('passwordToggle').title = 'Hide password';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.style.display = 'block';
+                eyeOffIcon.style.display = 'none';
+                document.getElementById('passwordToggle').title = 'Show password';
+            }
+        }
+
+        function toggleAuthMode() {
+            authMode = authMode === 'login' ? 'signup' : 'login';
+            
+            document.getElementById('nameGroup').classList.toggle('hidden', authMode === 'login');
+            document.getElementById('authTitle').textContent = authMode === 'login' ? 'Login' : 'Create Account';
+            document.getElementById('authButtonText').textContent = authMode === 'login' ? 'Login' : 'Sign Up';
+            document.getElementById('authSwitchText').textContent = authMode === 'login' ? "Don't have an account?" : 'Already have an account?';
+            document.getElementById('authSwitchButton').textContent = authMode === 'login' ? 'Sign Up' : 'Login';
+            document.getElementById('passwordStrength').style.display = authMode === 'signup' ? 'block' : 'none';
+            
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-text').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            document.querySelectorAll('.form-group input').forEach(el => {
+                el.classList.remove('error', 'success');
+            });
+        }
+
+        function validateField(field) {
+            const input = document.getElementById(field);
+            const error = document.getElementById(field + 'Error');
+            let isValid = true;
+            
+            if (field === 'name' && authMode === 'signup') {
+                if (!input.value.trim()) {
+                    error.textContent = 'Name is required';
+                    isValid = false;
+                } else if (input.value.trim().length < 2) {
+                    error.textContent = 'Name must be at least 2 characters';
+                    isValid = false;
+                }
+            }
+            
+            if (field === 'email') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!input.value.trim()) {
+                    error.textContent = 'Email is required';
+                    isValid = false;
+                } else if (!emailPattern.test(input.value)) {
+                    error.textContent = 'Please enter a valid email';
+                    isValid = false;
+                }
+            }
+            
+            if (field === 'password') {
+                if (!input.value) {
+                    error.textContent = 'Password is required';
+                    isValid = false;
+                } else if (input.value.length < 8) {
+                    error.textContent = 'Password must be at least 8 characters';
+                    isValid = false;
+                } else if (!/[!@#$%^&*]/.test(input.value)) {
+                    error.textContent = 'Include at least one special character (!@#$%^&*)';
+                    isValid = false;
+                }
+            }
+            
+            error.classList.toggle('show', !isValid);
+            input.classList.toggle('error', !isValid);
+            input.classList.toggle('success', isValid && input.value);
+            
+            return isValid;
+        }
+
+        function updatePasswordStrength() {
+            const password = document.getElementById('password').value;
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length >= 8) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            if (/[!@#$%^&*]/.test(password)) strength += 25;
+            
+            fill.style.width = strength + '%';
+            
+            if (strength <= 25) {
+                fill.style.background = '#ff4444';
+                text.textContent = 'Weak';
+                text.style.color = '#ff4444';
+            } else if (strength <= 50) {
+                fill.style.background = '#ffcc00';
+                text.textContent = 'Fair';
+                text.style.color = '#ffcc00';
+            } else if (strength <= 75) {
+                fill.style.background = '#88cc00';
+                text.textContent = 'Good';
+                text.style.color = '#88cc00';
+            } else {
+                fill.style.background = '#00cc66';
+                text.textContent = 'Strong';
+                text.style.color = '#00cc66';
+            }
+        }
+
+        async function handleAuth() {
+            clearErrors();
+            
+            let isValid = true;
+            if (authMode === 'signup') isValid = validateField('name') && isValid;
+            isValid = validateField('email') && isValid;
+            isValid = validateField('password') && isValid;
+            
+            if (!isValid) return;
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Show loading
+            document.getElementById('authButtonText').innerHTML = '<span class="loading"></span>';
+            
+            try {
+                const url = authMode === 'signup' 
+                    ? 'http://localhost:5000/api/register' 
+                    : 'http://localhost:5000/api/login';
+                
+                const payload = authMode === 'signup' 
+                    ? { name, email, password } 
+                    : { email, password };
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showToast(data.message || 'Something went wrong', 'error');
+                    return;
+                }
+                
+                // Success
+                user = { name: data.name || name, email };
+                localStorage.setItem('user', JSON.stringify(user));
+                
+                updateUserUI();
+                showToast(`Welcome${authMode === 'login' ? ' back' : ''}, ${user.name}!`, 'success');
+                showPage('home');
+                
+            } catch (err) {
+                // Fallback to local demo mode
+                console.log('Backend not available, using demo mode');
+                user = { name: name || 'User', email };
+                localStorage.setItem('user', JSON.stringify(user));
+                updateUserUI();
+                showToast(`Welcome, ${user.name}! (Demo Mode)`, 'success');
+                showPage('home');
+            } finally {
+                document.getElementById('authButtonText').textContent = authMode === 'login' ? 'Login' : 'Sign Up';
+            }
+        }
+
+        function updateUserUI() {
+            if (user) {
+                document.getElementById('userSection').innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-right: 0.5rem;">
+                        <span style="color: #ff6600; font-weight: 600; font-size: 1rem;">${user.name}</span>
+                    </div>
+                    <button class="btn-secondary" onclick="logout()" style="padding: 0.5rem 1rem;">Logout</button>
+                `;
+                document.getElementById('welcomeMessage').innerHTML = `Welcome back, <span style="color: #fff; font-weight: 700;">${user.name}</span>! 💪`;
+                document.getElementById('welcomeMessage').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            user = null;
+            localStorage.removeItem('user');
+            document.getElementById('userSection').innerHTML = '<button class="btn-primary" onclick="showPage(\'auth\')">Login</button>';
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('name').value = '';
+            clearErrors();
+            showToast('Logged out successfully', 'info');
+        }
+
+        function checkSavedSession() {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                user = JSON.parse(savedUser);
+                updateUserUI();
+            }
+        }
+
+        // ==================== BMI CALCULATOR ====================
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            
+            if (!height || !weight || height <= 0 || weight <= 0) {
+                showToast('Please enter valid height and weight', 'error');
+                return;
+            }
+            
+            const heightM = height / 100;
+            const bmi = (weight / (heightM * heightM)).toFixed(1);
+            
+            let category, color, tips;
+            
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                color = '#00aaff';
+                tips = {
+                    title: 'Tips for Healthy Weight Gain',
+                    items: [
+                        'Eat more frequently - 5-6 smaller meals per day',
+                        'Choose nutrient-rich foods',
+                        'Add healthy calories with nuts, avocados, olive oil',
+                        'Try smoothies and shakes',
+                        'Include strength training to build muscle'
+                    ]
+                };
+            } else if (bmi < 25) {
+                category = 'Normal';
+                color = '#00cc66';
+                tips = {
+                    title: 'Tips to Maintain Healthy Weight',
+                    items: [
+                        'Continue balanced eating habits',
+                        'Stay physically active - 150 min/week',
+                        'Monitor your weight regularly',
+                        'Get adequate sleep (7-9 hours)',
+                        'Stay hydrated with 8+ glasses of water'
+                    ]
+                };
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                color = '#ffcc00';
+                tips = {
+                    title: 'Tips for Healthy Weight Loss',
+                    items: [
+                        'Reduce calorie intake by 500 cal/day',
+                        'Increase physical activity',
+                        'Eat more vegetables and lean proteins',
+                        'Limit sugary drinks and processed foods',
+                        'Practice portion control'
+                    ]
+                };
+            } else {
+                category = 'Obese';
+                color = '#ff4444';
+                tips = {
+                    title: 'Important Health Recommendations',
+                    items: [
+                        'Consult a healthcare professional',
+                        'Start with small, achievable goals',
+                        'Focus on sustainable lifestyle changes',
+                        'Consider working with a nutritionist',
+                        'Include regular physical activity gradually'
+                    ]
+                };
+            }
+            
+            // Calculate indicator position (0-100%)
+            let position;
+            if (bmi < 18.5) position = (bmi / 18.5) * 25;
+            else if (bmi < 25) position = 25 + ((bmi - 18.5) / 6.5) * 25;
+            else if (bmi < 30) position = 50 + ((bmi - 25) / 5) * 25;
+            else position = Math.min(75 + ((bmi - 30) / 10) * 25, 100);
+            
+            document.getElementById('bmiValue').textContent = bmi;
+            document.getElementById('bmiValue').style.color = color;
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').style.color = color;
+            document.getElementById('bmiIndicator').style.left = position + '%';
+            
+            document.getElementById('bmiTips').innerHTML = `
+                <h4>${tips.title}</h4>
+                <ul>${tips.items.map(item => `<li>${item}</li>`).join('')}</ul>
+            `;
+            
+            document.getElementById('bmiResult').classList.remove('hidden');
+        }
+
+        // ==================== NUTRITION ====================
+        function renderNutritionTable() {
+            const tbody = document.getElementById('nutritionBody');
+            tbody.innerHTML = nutritionData.map(item => `
+                <tr>
+                    <td><strong>${item.food}</strong></td>
+                    <td class="calorie-value">${item.calories}</td>
+                    <td class="${parseFloat(item.protein) >= 15 ? 'protein-high' : ''}">${item.protein}</td>
+                    <td>${item.carbs}</td>
+                    <td>${item.fats}</td>
+                    <td>${item.fiber}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== PROGRAMS ====================
+        function renderEquipmentExercises() {
+            const grid = document.getElementById('equipmentGrid');
+            grid.innerHTML = equipmentExercises.map(ex => `
+                <div class="program-card scroll-hidden">
+                    <div class="card-img">
+                        <img src="${ex.image}" alt="${ex.name}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${ex.name}</h3>
+                        <p>${ex.desc || ''}</p>
+                        <p><strong>${ex.sets}</strong></p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBodyweightExercises() {
+            const grid = document.getElementById('bodyweightGrid');
+            grid.innerHTML = bodyweightExercises.map(ex => `
+                <div class="program-card scroll-hidden">
+                    <div class="card-img">
+                        <img src="${ex.image}" alt="${ex.name}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${ex.name}</h3>
+                        <p><strong>${ex.sets}</strong></p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBodyParts() {
+            const container = document.getElementById('bodypartsTab');
+            let html = '';
+            
+            for (const [key, section] of Object.entries(bodyPartsData)) {
+                html += `
+                    <div class="card exercise-section scroll-hidden" style="margin-bottom: 2rem;">
+                        <h3>${section.title}</h3>
+                        <div class="exercise-list">
+                            ${section.exercises.map(ex => `
+                                <div class="exercise-item">
+                                    <div class="exercise-icon">${ex.icon}</div>
+                                    <div class="exercise-info">
+                                        <h4>${ex.name}</h4>
+                                        <p>${ex.sets}</p>
+                                        <span class="badge badge-${ex.type}">${ex.type === 'equipment' ? 'Equipment' : 'Bodyweight'}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('equipmentTab').classList.add('hidden');
+            document.getElementById('bodyweightTab').classList.add('hidden');
+            document.getElementById('bodypartsTab').classList.add('hidden');
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Re-trigger observer for new elements
+            setTimeout(observeElements, 100);
+        }
+
+        // ==================== WORKOUTS ====================
+        function renderWorkoutPlans(filter = 'all') {
+            const grid = document.getElementById('workoutsGrid');
+            if (!grid) return;
+            const plansToShow = workoutPlans.filter(plan => filter === 'all' || plan.difficulty === filter);
+            
+            grid.innerHTML = plansToShow.map(plan => `
+                <div class="card scroll-hidden">
+                    <h3 style="margin-bottom: 0.4rem;">${plan.name}</h3>
+                    <p style="color: #ff6600; font-size: 0.9rem; margin-bottom: 0.6rem;">Inspired by ${plan.inspiredBy}</p>
+                    <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 0.9rem;">${plan.description}</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem; margin-bottom: 1rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.06); text-transform: capitalize;">${plan.difficulty}</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.06);">${plan.daysPerWeek} days/week</span>
+                        <span class="badge" style="background: rgba(255,255,255,0.06);">${plan.goal}</span>
+                    </div>
+                    <button class="btn-secondary" onclick="openWorkoutModal('${plan.id}')">View Plan</button>
+                </div>
+            `).join('');
+
+            observeElements();
+        }
+
+        function filterWorkouts(difficulty) {
+            const buttons = document.querySelectorAll('#workoutsFilter .tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`#workoutsFilter .tab-btn[data-difficulty="${difficulty}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            renderWorkoutPlans(difficulty);
+        }
+
+        function openWorkoutModal(planId) {
+            const modal = document.getElementById('workoutModal');
+            const body = document.getElementById('workoutModalBody');
+            const plan = workoutPlans.find(p => p.id === planId);
+            if (!modal || !body || !plan) return;
+
+            body.innerHTML = `
+                <h2 style="margin-bottom: 0.5rem;">${plan.name}</h2>
+                <p style="color: #ff6600; font-size: 0.9rem; margin-bottom: 1rem;">Inspired by ${plan.inspiredBy}</p>
+                <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 1.5rem;">${plan.description}</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.8rem;">
+                    <span class="badge" style="background: rgba(255,255,255,0.06); text-transform: capitalize;">${plan.difficulty} • ${plan.daysPerWeek} days/week</span>
+                    <span class="badge" style="background: rgba(255,255,255,0.06);">${plan.goal}</span>
+                </div>
+                <div>
+                    ${plan.days.map(day => `
+                        <div style="margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                            <h3 style="font-size: 1.05rem; margin-bottom: 0.25rem;">${day.name}</h3>
+                            <p style="color: #888; font-size: 0.85rem; margin-bottom: 0.4rem;">${day.focus || ''}</p>
+                            ${day.notes ? `<p style="color: #aaa; font-size: 0.8rem; margin-bottom: 0.4rem;"><em>${day.notes}</em></p>` : ''}
+                            ${day.exercises && day.exercises.length ? `
+                                <ul style="list-style: none; padding-left: 0; margin: 0;">
+                                    ${day.exercises.map(ex => `
+                                        <li style="font-size: 0.85rem; margin-bottom: 0.3rem;">
+                                            <strong>${ex.name}</strong> – ${ex.sets} sets × ${ex.reps}, rest ${ex.rest}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            ` : '<p style="color: #666; font-size: 0.8rem;">No structured exercises – focus on rest or light activity.</p>'}
+                        </div>
+                    `).join('')}
+                    <p style="color: #666; font-size: 0.75rem; margin-top: 0.5rem;">
+                        These plans are inspired by the training styles of well-known bodybuilders but adapted for general use. Always adjust volume and intensity to your own level, and consult a professional if you are unsure.
+                    </p>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function closeWorkoutModal() {
+            const modal = document.getElementById('workoutModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        // ==================== CARDIO ====================
+        function renderCardioWorkouts() {
+            const grid = document.getElementById('cardioGrid');
+            grid.innerHTML = cardioData.map(item => `
+                <div class="cardio-card scroll-hidden">
+                    <div class="card-img">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${item.name}</h3>
+                        <p>Duration: ${item.duration}</p>
+                        <p>Intensity: ${item.intensity.charAt(0).toUpperCase() + item.intensity.slice(1)}</p>
+                        <div class="intensity-bar ${item.intensity}">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="calories">🔥 Burns ~${item.calories} cal</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+    </script>
+</body>
+</html>
